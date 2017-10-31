@@ -8,7 +8,7 @@ Requires: specific data/object/class (to import to and to export from).
 
 Console app is built for temporary quick testing.
 
-`dotnet run -p text-line-importer-from-text-file/text-line-importer-from-text-file.csproj`
+`dotnet run -p text-line-importer-from-text-file/text-line-importer-from-text-file.csproj text-line-importer-from-text-file/text-file-input.txt`
 
 ## Travis:
 
