@@ -1,0 +1,6 @@
+SOLID Principles:
+Single Responsibility
+Open/closed
+Liskov substitution
+Interface segregation
+Dependency inversion
