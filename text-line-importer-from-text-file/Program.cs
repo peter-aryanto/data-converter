@@ -27,9 +27,9 @@ namespace MainProgram
         Console.WriteLine("Reading from file: " + inputTextFilePathAndName);
       }
 
-      TextFileLinesToObjectListConverter<StringWrapper> textFileLinesTostringListConverter =
+      textFileLinesTostringListConverter =
         new TextFileLinesToObjectListConverter<StringWrapper>(ShowExceptionErrorMessage);
-      List<StringWrapper> stringListToSort =
+      stringListToSort =
         textFileLinesTostringListConverter.Convert(args[0]);
 
       if (stringListToSort == null || stringListToSort.Count == 0)
@@ -68,7 +68,7 @@ namespace MainProgram
     private static void ExportstringsToTextFile(
       List<StringWrapper> stringsList,
       string textFilePathAndName,
-      bool displaystringsOnScreen
+      bool displayStringsOnScreen
     )
     {
       StreamWriter textFileWriter = null;
@@ -78,7 +78,7 @@ namespace MainProgram
 
         foreach (StringWrapper aString in stringsList)
         {
-          if (displaystringsOnScreen)
+          if (displayStringsOnScreen)
           {
             Console.WriteLine(aString.TextData);
           }

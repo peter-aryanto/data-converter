@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+//using System.Runtime.ExceptionServices;
 
 namespace DataConverter
 {
@@ -8,11 +9,22 @@ namespace DataConverter
   {
     public delegate void ExceptionHandlingMethod(Exception e);
 
-    private ExceptionHandlingMethod HandleException;
+    private ExceptionHandlingMethod handleException; /*= (Exception e) =>
+    {
+      if (e.InnerException != null)
+      {
+        e = e.InnerException;
+      }
+
+      ExceptionDispatchInfo.Capture(e).Throw();
+    };*/
 
     public TextFileLinesToObjectListConverter(ExceptionHandlingMethod handleException)
     {
-      this.HandleException = handleException;
+      if (handleException != null)
+      {
+        this.handleException = handleException;
+      }
     }
 
     public List<T> Convert(string textFilePathAndName)
@@ -40,18 +52,26 @@ namespace DataConverter
           }
           catch (Exception e)
           {
-            if (this.HandleException != null)
+            if (this.handleException != null)
             {
-              this.HandleException(e);
+              this.handleException(e);
+            }
+            else
+            {
+              throw;
             }
           }
         }
       }
       catch (Exception e)
       {
-        if (this.HandleException != null)
+        if (this.handleException != null)
         {
-          this.HandleException(e);
+          this.handleException(e);
+        }
+        else
+        {
+          throw;
         }
       }
       finally
