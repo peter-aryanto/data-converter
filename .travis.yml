@@ -4,4 +4,6 @@ mono: none
 dotnet: 2.0.0
 
 script:
-- dotnet run -p text-line-importer-from-text-file/text-line-importer-from-text-file.csproj text-line-importer-from-text-file/text-file-input.txt
+- dotnet run -p text-line-importer-from-text-file/text-line-importer-from-text-file.csproj
+- dotnet run -p text-line-importer-from-text-file/text-line-importer-from-text-file.csproj file-that-does-not-exist.file
+- dotnet run -p text-line-importer-from-text-file/text-line-importer-from-text-file.csproj text-line-importer-from-text-file/input-text-file.txt

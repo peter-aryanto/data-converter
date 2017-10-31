@@ -9,14 +9,26 @@ namespace MainProgram
   {
     static void Main(string[] args)
     {
-      if (args.Length != 1)
+      const string constDefaultOutputTextFilePathAndName = "output-text-file.txt";
+
+      string inputTextFilePathAndName;
+      string outputTextFilePathAndName = constDefaultOutputTextFilePathAndName;
+      TextFileLinesToObjectListConverter<StringWrapper> textFileLinesTostringListConverter;
+      List<StringWrapper> stringListToSort;
+
+      if (args.Length == 0)
       {
-        Console.WriteLine("Please execute: text-line-importer-from-text-file [text-file-path-and-name]");
+        Console.WriteLine("Please execute: text-line-importer-from-text-file <input-text-file-path-and-name> [<output-text-file-path-and-name>]");
         return;
+      }
+      else
+      {
+        inputTextFilePathAndName = args[0];
+        Console.WriteLine("Reading from file: " + inputTextFilePathAndName);
       }
 
       TextFileLinesToObjectListConverter<StringWrapper> textFileLinesTostringListConverter =
-        new TextFileLinesToObjectListConverter<StringWrapper>(HandleException);
+        new TextFileLinesToObjectListConverter<StringWrapper>(ShowExceptionErrorMessage);
       List<StringWrapper> stringListToSort =
         textFileLinesTostringListConverter.Convert(args[0]);
 
@@ -26,7 +38,11 @@ namespace MainProgram
         return;
       }
 
-      ExportstringsToTextFile(stringListToSort, "text-file-output.txt", true);
+      if (args.Length >= 2)
+      {
+        outputTextFilePathAndName = args[1];
+      }
+      ExportstringsToTextFile(stringListToSort, outputTextFilePathAndName, true);
     }
 
     private class StringWrapper
@@ -39,7 +55,7 @@ namespace MainProgram
       }
     }
 
-    private static void HandleException(Exception e)
+    private static void ShowExceptionErrorMessage(Exception e)
     {
       if (e.InnerException != null)
       {
