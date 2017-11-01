@@ -12,9 +12,12 @@ namespace MainProgram
       const string constDefaultOutputTextFilePathAndName = "output-text-file.txt";
 
       string inputTextFilePathAndName;
+      TextFileLinesToObjectListConverter<StringWrapper> textFileLinesToStringListConverter;
+
+      List<StringWrapper> stringListToConvert;
+
       string outputTextFilePathAndName = constDefaultOutputTextFilePathAndName;
-      TextFileLinesToObjectListConverter<StringWrapper> textFileLinesTostringListConverter;
-      List<StringWrapper> stringListToSort;
+      ObjectListToTextFileLinesConverter<StringWrapper> stringListToTextLinesConverter;
 
       if (args.Length == 0)
       {
@@ -27,12 +30,12 @@ namespace MainProgram
         Console.WriteLine("Reading from file: " + inputTextFilePathAndName);
       }
 
-      textFileLinesTostringListConverter =
+      textFileLinesToStringListConverter =
         new TextFileLinesToObjectListConverter<StringWrapper>(ShowExceptionErrorMessage);
-      stringListToSort =
-        textFileLinesTostringListConverter.Convert(args[0]);
+      stringListToConvert =
+        textFileLinesToStringListConverter.Convert(inputTextFilePathAndName);
 
-      if (stringListToSort == null || stringListToSort.Count == 0)
+      if (stringListToConvert == null || stringListToConvert.Count == 0)
       {
         Console.WriteLine("Program is stopped. No data to process.");
         return;
@@ -42,16 +45,28 @@ namespace MainProgram
       {
         outputTextFilePathAndName = args[1];
       }
-      ExportstringsToTextFile(stringListToSort, outputTextFilePathAndName, true);
+
+      stringListToTextLinesConverter =
+        new ObjectListToTextFileLinesConverter<StringWrapper>(ShowExceptionErrorMessage);
+      stringListToTextLinesConverter.Convert(
+        stringListToConvert,
+        outputTextFilePathAndName,
+        true
+      );
     }
 
     private class StringWrapper
     {
-      public string TextData { get; }
+      private string textData;
 
       public StringWrapper(string inputText)
       {
-        this.TextData = inputText;
+        this.textData = inputText;
+      }
+
+      public override string ToString()
+      {
+        return textData;
       }
     }
 
@@ -64,40 +79,5 @@ namespace MainProgram
 
       Console.WriteLine(e.GetType().Name + ": " + e.Message);
     }
-
-    private static void ExportstringsToTextFile(
-      List<StringWrapper> stringsList,
-      string textFilePathAndName,
-      bool displayStringsOnScreen
-    )
-    {
-      StreamWriter textFileWriter = null;
-      try
-      {
-        textFileWriter = new StreamWriter(textFilePathAndName);
-
-        foreach (StringWrapper aString in stringsList)
-        {
-          if (displayStringsOnScreen)
-          {
-            Console.WriteLine(aString.TextData);
-          }
-
-          textFileWriter.WriteLine(aString.TextData);
-        }
-      }
-      catch (Exception e)
-      {
-        Console.WriteLine("The file could not be written:");
-        Console.WriteLine(e.Message);
-      }
-      finally
-      {
-        if (textFileWriter != null)
-        {
-          textFileWriter.Close();
-        }
-      }
-   }
   }
 }
